@@ -7,7 +7,7 @@ class User(Document):
         ('products', "products"),
         ('categories', "categories")
     )
-    telegram_id = StringField(max_length=32, required=True)
+    telegram_id = StringField(max_length=32, required=True, unique=True)
     username = StringField(max_length=128)
     fullname = StringField(max_length=256)
     phone_number = StringField(max_length=20)
@@ -19,16 +19,22 @@ class Cart(Document):
     user = ReferenceField(User)
     is_archived = BooleanField(default=False)
 
-    def get_cart(self):
-        return CartProduct.objects(cart=self)
+    @classmethod
+    def get_or_create_cart(cls, user_id):
+        user = User.objects.get(telegram_id=str(user_id))
+        cart = cls.objects.get(user=user, is_archived=False) or cls.objects.create(user=user)
+        return cart
 
-    def add_product_to_cart(self, product):
+    def get_cart_products(self):
+        products = []
+        cart_products = CartProduct.objects(cart=self)
+        for cart_product in cart_products:
+            products.append(cart_product.product)
+        return products
 
-        # list_of_product_for_insert = [
-        #     CartProduct(cart=self, product=product) for product in products
-        # ]
-        # CartProduct.objects.insert(*list_of_product_for_insert)
-        CartProduct(cart=self, product=product).save()
+    def add_product_to_cart(self, product_id):
+
+        CartProduct(cart=self, product=Product.objects.get(id=product_id)).save()
 
     def delete_product_from_cart(self, product):
         CartProduct.objects(cart=self, product=product).first().delete()
@@ -75,7 +81,7 @@ class Category(Document):
         self.save()
 
     def get_products(self):
-        return Product.objects.filter(category=self)
+        return Product.objects(category=self)
 
     def __str__(self):
         return self.title
@@ -107,7 +113,7 @@ class Texts(Document):
     body = StringField(max_length=2048)
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # cart = Cart.objects.first()
     # print(cart.get_cart().item_frequencies('product'))
 
@@ -148,13 +154,13 @@ if __name__ == "__main__":
 
     # for i in range(10):
     #     # title, article, category, price
-    prod = {
-        'title': f"title1",
-        'article': f"article1",
-        'category': Category.objects.get(id="5e385585c53984f8ec4f63c1"),
-        'price': 111,
-        'image': "F:\\Python\\02 ITEA\\ITEA_Lesson-12\\shop\\models\\images\\cat.jpeg"
-    }
-    product = Product.objects.create(**prod)
+    # prod = {
+    #     'title': f"title1",
+    #     'article': f"article1",
+    #     'category': Category.objects.get(id="5e385585c53984f8ec4f63c1"),
+    #     'price': 111,
+    #     'image': "https://www.i-foto-graf.com/_pu/1/37961787.jpg"
+    # }
+    # product = Product.objects.create(**prod)
     # cart.add_product_to_cart(product)
 

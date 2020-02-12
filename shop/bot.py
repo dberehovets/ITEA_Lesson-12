@@ -1,5 +1,5 @@
 from telebot import TeleBot, types
-from models.model import Category, Product
+from models.model import Category, Cart, User
 
 
 class TGBot(TeleBot):
@@ -23,10 +23,7 @@ class TGBot(TeleBot):
 
         self.send_message(user_id, "Виберіть категорію", reply_markup=kb)
 
-    def send_subcategories(self, call, user_id=None, text=None, force_send=True):
-
-        # if not all([user_id, text]) and force_send:
-        #     raise Exception("Force send cannot be used without user_id or text")
+    def send_subcategories(self, call):
 
         kb = types.InlineKeyboardMarkup()
 
@@ -42,7 +39,6 @@ class TGBot(TeleBot):
                               chat_id=call.message.chat.id, reply_markup=kb)
 
     def send_products(self, query):
-
         category = Category.objects.get(id=query.query)
         products = category.get_products()
 
@@ -53,16 +49,33 @@ class TGBot(TeleBot):
 
             button = types.InlineKeyboardButton(text="Додати в кошик", callback_data="product" + str(product.id))
             kb.add(button)
-            result1 = types.InlineQueryResultArticle(
+            result = types.InlineQueryResultArticle(
                 id=str(product.id),
                 title=product.title,
                 description=f"{product.price} грн",
                 input_message_content=types.InputTextMessageContent(parse_mode="HTML",
-                                                disable_web_page_preview=False,
-                                                message_text=f"{product.title} - {product.price} грн <a href='{product.image}'>&#8204</a>"
-                                                ),
+                                        disable_web_page_preview=False,
+                                        message_text=f"{product.title} - {product.price} грн <a href='{product.image}'>&#8204</a>"
+                                        ),
                 thumb_url="https://www.i-foto-graf.com/_pu/1/37961787.jpg",
                 reply_markup=kb
             )
-            results.append(result1)
+            results.append(result)
         self.answer_inline_query(query.id, results, cache_time=0)
+
+    def send_cart(self, user_id):
+        user = User.objects.get(telegram_id=str(user_id))
+        cart = Cart.objects.get(user=user)
+        products = cart.get_cart_products()
+
+        results = []
+        for product in products:
+            print(product.id)
+            kb = types.InlineKeyboardMarkup()
+
+            button = types.InlineKeyboardButton(text="Видалити з кошика", callback_data="product" + str(product.id))
+            kb.add(button)
+            self.send_message(user_id, text=types.InputTextMessageContent(parse_mode="HTML",
+                                        disable_web_page_preview=False,
+                                        message_text=f"{product.title} - {product.price} грн <a href='{product.image}'>&#8204</a>"
+                                        ), reply_markup=kb)
