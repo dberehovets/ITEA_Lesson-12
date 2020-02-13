@@ -68,14 +68,27 @@ class TGBot(TeleBot):
         cart = Cart.objects.get(user=user)
         products = cart.get_cart_products()
 
-        results = []
+        price = 0
         for product in products:
-            print(product.id)
             kb = types.InlineKeyboardMarkup()
-
-            button = types.InlineKeyboardButton(text="Видалити з кошика", callback_data="product" + str(product.id))
+            price += product.price
+            button = types.InlineKeyboardButton(text=f"Видалити {product.title} з кошика", callback_data="delete" + str(product.id))
             kb.add(button)
-            self.send_message(user_id, text=types.InputTextMessageContent(parse_mode="HTML",
-                                        disable_web_page_preview=False,
-                                        message_text=f"{product.title} - {product.price} грн <a href='{product.image}'>&#8204</a>"
-                                        ), reply_markup=kb)
+            self.send_photo(user_id, photo=product.image, caption=f"{product.title} - {product.price} грн\n{product.description}", reply_markup=kb)
+
+        if products:
+            kb = types.InlineKeyboardMarkup()
+            button = types.InlineKeyboardButton(text="Оформити замовлення", callback_data="order" + str(user_id))
+            kb.add(button)
+            self.send_message(user_id, f"{len(products)} {self._get_right_case(len(products))} загальною вартістю {price} грн", reply_markup=kb)
+        else:
+            self.send_message(user_id, "Кошик порожій")
+
+    @staticmethod
+    def _get_right_case(amount):
+        if 4 < amount < 21 or amount%10 == 0 or 4 < amount%10 <= 9:
+            return "продуктів"
+        elif amount%10 == 1:
+            return "продукт"
+        elif 1 < amount%10 <= 4:
+            return "продукти"

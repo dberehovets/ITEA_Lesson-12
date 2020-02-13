@@ -13,6 +13,7 @@ class User(Document):
     phone_number = StringField(max_length=20)
     state = StringField(choices=STATES)
     email = EmailField()
+    address = StringField(max_length=256)
 
 
 class Cart(Document):

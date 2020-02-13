@@ -1,10 +1,8 @@
 from bot import TGBot
 from shop.config import TOKEN
-from shop.models.model import Texts, Category, Product, Cart
-from shop.keyboards import START_KB, CATEGORIES_KB
-from telebot.types import (ReplyKeyboardMarkup, KeyboardButton,
-                           InlineKeyboardButton, InlineKeyboardMarkup,
-                           InlineQueryResultArticle, InputTextMessageContent)
+from shop.models.model import Product, Cart, User
+from shop.keyboards import START_KB
+from telebot.types import (ReplyKeyboardMarkup, KeyboardButton)
 
 bot = TGBot(token=TOKEN)
 
@@ -27,8 +25,7 @@ def get_roots(message):
 
 
 @bot.message_handler(func=lambda message: message.text == START_KB["cart"])
-def get_roots(message):
-
+def get_cart(message):
     bot.send_cart(message.from_user.id)
 
 
@@ -42,6 +39,23 @@ def add_to_cart(call):
     cart = Cart.get_or_create_cart(user_id=call.from_user.id)
     cart.add_product_to_cart(product_id=call.data.replace("product", ""))
     bot.send_message(call.from_user.id, "Товар додано в кошик!")
+
+
+@bot.callback_query_handler(func=lambda call: True if "delete" in call.data else False)
+def delete_from_cart(call):
+    product = Product.objects.get(id=call.data.replace("delete", ""))
+    cart = Cart.get_or_create_cart(user_id=call.from_user.id)
+    cart.delete_product_from_cart(product)
+    bot.edit_message_caption(caption="Товар видалено з кошика!",  chat_id=call.message.chat.id, message_id=call.message.message_id)
+
+
+@bot.callback_query_handler(func=lambda call: True if "order" in call.data else False)
+def make_order(call):
+    cart = Cart.get_or_create_cart(user_id=call.from_user.id)
+    products = cart.get_cart_products()
+    for product in products:
+        cart.delete_product_from_cart(product)
+    bot.send_message(call.message.chat.id, f"Дякуюємо, {call.from_user.first_name}! Менеджер зв'яжеться з вами для підтвердження доставки.")
 
 
 @bot.inline_handler(func=lambda query: True)
