@@ -1,10 +1,29 @@
 from bot import TGBot
-from config import TOKEN
-from models.model import Product, Cart, User
+from config import TOKEN, WEBHOOK_URL, PATH
+from models.model import Product, Cart
 from keyboards import START_KB
-from telebot.types import (ReplyKeyboardMarkup, KeyboardButton)
+from telebot.types import (ReplyKeyboardMarkup, KeyboardButton, Update)
+from flask import Flask, request, abort
 
 bot = TGBot(token=TOKEN)
+
+app = Flask(__name__)
+
+
+@app.route(f'/{PATH}', methods=['POST'])
+def webhook():
+    """
+    Function process webhook call
+    """
+    if request.headers.get('content-type') == 'application/json':
+
+        json_string = request.get_data().decode('utf-8')
+        update = Update.de_json(json_string)
+        bot.process_new_updates([update])
+        return ''
+
+    else:
+        abort(403)
 
 
 @bot.message_handler(commands=["start"])
@@ -64,4 +83,11 @@ def get_products(query):
 
 
 if __name__ == "__main__":
-    bot.polling()
+    import time
+    print("Started")
+    bot.remove_webhook()
+    time.sleep(1)
+    bot.set_webhook(
+        url=WEBHOOK_URL,
+        certificate=open("nginx-selfsigned.crt", "r")
+    )
