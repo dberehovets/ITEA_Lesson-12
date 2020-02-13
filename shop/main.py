@@ -1,7 +1,7 @@
 from bot import TGBot
-from shop.config import TOKEN
-from shop.models.model import Product, Cart, User
-from shop.keyboards import START_KB
+from config import TOKEN
+from models.model import Product, Cart, User
+from keyboards import START_KB
 from telebot.types import (ReplyKeyboardMarkup, KeyboardButton)
 
 bot = TGBot(token=TOKEN)
