@@ -1,6 +1,6 @@
 from bot import TGBot
 from config import TOKEN, WEBHOOK_URL, PATH
-from models.model import Product, Cart
+from models.model import Product, Cart, User, DoesNotExist
 from keyboards import START_KB
 from telebot.types import (ReplyKeyboardMarkup, KeyboardButton, Update)
 from flask import Flask, request, abort
@@ -30,6 +30,11 @@ def webhook():
 def start(message):
     # txt = Texts.objects(text_type="Greetings").get()
     txt = "Hello!"
+
+    try:
+        User.objects.get(telegram_id=str(message.from_user.id))
+    except DoesNotExist:
+        User(telegram_id=str(message.from_user.id)).save()
 
     kb = ReplyKeyboardMarkup()
     buttons = [KeyboardButton(button_name) for button_name in START_KB.values()]
