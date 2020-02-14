@@ -77,9 +77,13 @@ def delete_from_cart(call):
 def make_order(call):
     cart = Cart.get_or_create_cart(user_id=call.from_user.id)
     products = cart.get_cart_products()
-    for product in products:
-        cart.delete_product_from_cart(product)
-    bot.send_message(call.message.chat.id, f"Дякуюємо, {call.from_user.first_name}! Менеджер зв'яжеться з вами для підтвердження доставки.")
+    if products:
+        bot.send_message(call.message.chat.id,
+                         f"Дякуюємо, {call.from_user.first_name}! Менеджер зв'яжеться з вами для підтвердження доставки.")
+        for product in products:
+            cart.delete_product_from_cart(product)
+    else:
+        bot.send_message(call.message.chat.id, "Кошик порожній!")
 
 
 @bot.inline_handler(func=lambda query: True)

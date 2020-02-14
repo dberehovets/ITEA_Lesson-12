@@ -167,52 +167,52 @@ if __name__ == "__main__":
     # }
     # product = Product.objects.create(**prod)
     # cart.add_product_to_cart(product)
-    category = Category.objects.get(title="Комп'ютери")
-    Product(title='Apple iMac 27"',
-            description='Экран 27" IPS Retina (5120x2880), 5K LED, глянцевый / Intel Core i5 (3.0 ГГц) / RAM 16 ГБ / '
-                    'SSD 256 ГБ / AMD Radeon Pro 570X, 4 ГБ / Ethernet 10/100/1000 / Wi-Fi 802.11 a/b/g/n/ac / '
-                    'Bluetooth 4.2 / macOS Mojave / 650x516x203 мм, 9.44 кг / белый',
-            price=74339,
+    category = Category.objects.get(title="Велика побутова техніка")
+    Product(title='Вбудована посудомийна машина BOSCH',
+            description='Повногабаритна (60 см)/ 1.02/290 кВт/ч',
+            price=8599,
             category=category,
-            image="https://i.citrus.ua/uploads/content/product-photos/topchiy/March-2019/imac_01.jpg").save()
+            image="https://i2.rozetka.ua/goods/4689897/bosch_smv24ax00k_images_4689897824.jpg").save()
 
-    Product(title='Acer Aspire C24-865',
-            description='Екран 23.8" (1920x1080) Full HD IPS / Intel Core i3-8130U (2.2 - 3.4 ГГц) / RAM 8 ГБ / SSD 256 ГБ '
-                    '/ Intel UHD Graphics 620 / без ОД / LAN / Wi-Fi / Bluetooth / кардридер / веб-камера / '
-                    'Endless OS / 4 кг / сірий / клавіатура + миша',
-            price=15999,
+    Product(title='Піч для піци HENDI Basic 2/40 VETRO',
+            description="Двокамерна піч HENDI Basic 2/40 VETRO призначена для одночасного приготування 2 рум'яних піц "
+                        "або коржів діаметром 30 см. Випічка пропікається до хрусткої скоринки рівномірно завдяки "
+                        "розміщеним зверху та знизу тенам.",
+            price=26520,
             category=category,
-            image="https://img.moyo.ua/img/products/4285/32_600.jpg").save()
+            image="https://i2.rozetka.ua/goods/10295302/hendi_basic_2_40_vetro_images_10295302419.jpg").save()
 
-    Product(title='Everest Home 4070',
-            description='Intel Core i3-9100F (3.6 - 4.2 ГГц) / RAM 8 ГБ / HDD 1 ТБ / nVidia GeForce GTX 1050 Ti, 4 ГБ / '
-                    'Без ОД / LAN / без ОС',
-            price=11699,
-            category=category,
-            image="https://i2.rozetka.ua/goods/10879158/everest_home_4070_9414_images_10879158147._S.jpg").save()
 
-    category = Category.objects.get(title="Ноутбуки")
-    Product(title='Apple MacBook Pro 16"',
-            description='Экран 16" IPS (3072x1920), глянцевый / Intel Core i7-9750H (2.6 - 4.5 ГГц) / RAM 16 ГБ / '
-                    'SSD 512 ГБ / AMD Radeon Pro 5300M, 4 ГБ / без ОД / Wi-Fi / Bluetooth / веб-камера / '
-                    'macOS Catalina / 2.0 кг / серый космос',
-            price=65445,
+    category = Category.objects.get(title="Догляд та прибирання")
+    Product(title='Праска Bosch TDA3026110',
+            description='CeraniumGlissée Pro / 160 г/мин / З парою / Алюміній',
+            price=1299,
             category=category,
-            image="https://www.apple.com/v/macbook-pro-16/b/images/meta/og__csakh451i0eq_large.png?201912040308").save()
+            image="https://hotline.ua/img/tx/216/2165101215.jpg").save()
 
-    Product(title='HP Pavilion Gaming 15-cx0027ua',
-            description='Екран 15.6" IPS (1920x1080) Full HD, матовий / Intel Core i5-8300H (2.3 — 4.0 ГГц) / RAM 8 ГБ / '
-                    'SSD 256 ГБ / nVidia GeForce GTX 1050 Ti, 4 ГБ / без ОД / LAN / Wi-Fi / Bluetooth 4.2 / '
-                    'вебкамера / DOS / 2.22 кг / сірий',
-            price=18999,
+    Product(title='Швейна машина MINERVA M832B',
+            description='Електромеханічна / Напівавтомат / Словаччина',
+            price=3299,
             category=category,
-            image="https://i2.rozetka.ua/goods/14633000/hp_pavilion_15_8kq92ea_images_14633000997.jpg").save()
+            image="https://www.швейные-машинки.com.ua/3808-max_default/minerva-m-832-b.jpg").save()
 
-    Product(title='Lenovo IdeaPad 330S-15IKB',
-            description='Екран 15.6" IPS (1920x1080) Full HD, глянсовий з антивідблисковим покриттям / Intel Core i5-8250U '
-                    '(1.6 - 3.4 ГГц) / RAM 6 ГБ / HDD 1 ТБ / nVidia GeForce GTX 1050, 4 ГБ / без ОД / Wi-Fi / '
-                    'Bluetooth / веб-камера / Windows 10 Home 64bit / 1.87 кг / сірий',
-            price=16999,
+    Product(title='Робот-пилосос ECOVACS DEEBOT OZMO 610',
+            description='Тип прибирання -- Суха + волога',
+            price=6399,
             category=category,
-            image="https://i.citrus.ua/imgcache/size_500/uploads/shop/4/e/4eec78060b8b1e26ccca185d3cd2a7a2.jpg").save()
+            image="https://hotline.ua/img/tx/220/2200206465.jpg").save()
+
+    category = Category.objects.get(title="Сантехніка")
+    Product(title='Унітаз VILLEROY&BOCH',
+            description='Підвісний під інсталяцію',
+            price=6950,
+            category=category,
+            image="https://i1.rozetka.ua/goods/1842464/6743734_images_1842464283.jpg").save()
+
+    Product(title='Набір змішувачів для ванни',
+            description='Набір 3 в 1 / Урізний / Настінний',
+            price=2900,
+            category=category,
+            image="https://i1.rozetka.ua/goods/13291465/copy_imprese_horak_510170670_5d4bea759f53f_images_13291465702.jpg").save()
+
 

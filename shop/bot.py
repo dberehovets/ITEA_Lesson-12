@@ -55,9 +55,10 @@ class TGBot(TeleBot):
                 description=f"{product.price} грн",
                 input_message_content=types.InputTextMessageContent(parse_mode="HTML",
                                         disable_web_page_preview=False,
-                                        message_text=f"{product.title} - {product.price} грн <a href='{product.image}'>&#8204</a>"
+                                        message_text=f"{product.title} - {product.price} грн\n{product.description} "
+                                                     f"<a href='{product.image}'>&#8204</a>"
                                         ),
-                thumb_url="https://www.i-foto-graf.com/_pu/1/37961787.jpg",
+                thumb_url=product.image,
                 reply_markup=kb
             )
             results.append(result)
