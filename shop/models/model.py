@@ -167,54 +167,51 @@ if __name__ == "__main__":
     # }
     # product = Product.objects.create(**prod)
     # cart.add_product_to_cart(product)
-    category = Category.objects.get(title="Одяг для чоловіків")
-    Product(title='Куртка Helly Hansen Dubliner',
-            description='Країна реєстрації бренда -- Норвегія',
-            price=4899,
+    category = Category.objects.get(title="Міцні алкогольні напої")
+    Product(title='Лікер Jägermeister 0.7',
+            description='Температура подавання -- -18 °C',
+            price=299,
             category=category,
-            image="https://i1.rozetka.ua/goods/14156990/helly_hansen_7040055620269_images_14156990872.jpg").save()
+            image="https://i1.rozetka.ua/goods/1878151/jagermeister_4067700013019_images_1878151921.jpg").save()
 
-    Product(title='Світшот Champion Crewneck Sweatshirt',
-            description="""Особливості:
-                Світшот класичного крою, з круглим вирізом горловини.
-                Виріб із високим вмістом бавовни.
-                З манжетами на рукавах.
-                Спереду декорований логотипом""",
-            price=748,
+    Product(title='Бренді Cortel XO Superior 0.7 л 40%',
+            description="Температура подавання -- 20-23 °C",
+            price=469,
             category=category,
-            image="https://i2.rozetka.ua/goods/14318189/champion_8056426456886_images_14318189086.jpg").save()
+            image="https://i1.rozetka.ua/goods/10128952/cortel_3269557315662_3269551152874_images_10128952043.jpg").save()
 
 
-    category = Category.objects.get(title="Одяг для жінок")
-    Product(title='Пальто Orsay 830213',
-            description='Країна реєстрації бренда -- Німеччина',
-            price=2349,
+    category = Category.objects.get(title="Продукти")
+    Product(title='Цукерки Raffaello 150 г ',
+            description='Raffaello — це хрустка цукерка, вкрита кокосовою стружкою, із ніжним кремом та цілим мигдальним '
+                        'горіхом всередині. Чудовий подарунок, який допоможе проявити найніжніші почуття до коханої людини.',
+            price=75,
             category=category,
-            image="https://i2.rozetka.ua/goods/16594792/orsay_83021329736_images_16594792474.jpg").save()
+            image="https://i2.rozetka.ua/goods/4732896/ferrero_8000500023976_images_4732896128.jpg").save()
 
-    Product(title='Комплект Obsessive Housemaid',
-            description='Країна реєстрації бренда -- Польща',
-            price=1237,
-            category=category,
-            image="https://i1.rozetka.ua/goods/7847454/obsessive_5901688202937_images_7847454774.jpg").save()
-
-    Product(title='Пеньюар Obsessive 817',
-            description='Країна реєстрації бренда -- Польща',
-            price=672,
-            category=category,
-            image="https://i2.rozetka.ua/goods/8970815/copy_obsessive_5901688214441_5bfe8765c2ada_images_8970815159.jpg").save()
-
-    category = Category.objects.get(title="Одяг для дітей")
-    Product(title='Демісезонна куртка Reima Anise',
-            description='Країна реєстрації бренда -- Фінляндія',
-            price=2250,
-            category=category,
-            image="https://i2.rozetka.ua/goods/16627387/179539347_images_16627387274.jpg").save()
-
-    Product(title='Демісезонний комбінезон Garden Baby',
+    Product(title='Ананас шматочками Tropic Life',
             description='Країна реєстрації бренда -- Україна',
-            price=612 ,
+            price=39,
             category=category,
-            image="https://i1.rozetka.ua/goods/16392111/garden_baby4821208766248_images_16392111079.jpg").save()
+            image="https://i2.rozetka.ua/goods/14571187/tropic_life_5060235650369_images_14571187705.jpg").save()
+
+    Product(title='Чипси Pringles Original',
+            description='Країна реєстрації бренда -- Польща',
+            price=52,
+            category=category,
+            image="https://i2.rozetka.ua/goods/1557017/pringles_5053990101573_images_1557017729.jpg").save()
+
+    category = Category.objects.get(title="Вино")
+    Product(title='Вино Marlborough Sun Sauvignon Blanc',
+            description='Країна реєстрації бренда -- Нова Зеландія',
+            price=235,
+            category=category,
+            image="https://i1.rozetka.ua/goods/13815262/marlborough_sun_9418076001394_images_13815262951.png").save()
+
+    Product(title='Вино червоне напівсолодке 0.75 л 11%',
+            description='Країна реєстрації бренда -- Франція',
+            price=110,
+            category=category,
+            image="https://i1.rozetka.ua/goods/9182186/maison_bouey_3295890194275_images_9182186935.jpg").save()
 
 
