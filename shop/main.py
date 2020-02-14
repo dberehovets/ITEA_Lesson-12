@@ -88,6 +88,7 @@ def get_products(query):
 
 
 if __name__ == "__main__":
+    # bot.polling()
     import time
     print("Started")
     bot.remove_webhook()

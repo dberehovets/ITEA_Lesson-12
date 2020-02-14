@@ -23,8 +23,11 @@ class Cart(Document):
     @classmethod
     def get_or_create_cart(cls, user_id):
         user = User.objects.get(telegram_id=str(user_id))
-        cart = cls.objects.get(user=user, is_archived=False) or cls.objects.create(user=user)
-        return cart
+
+        try:
+            return cls.objects.get(user=user, is_archived=False)
+        except DoesNotExist:
+            return cls.objects.create(user=user)
 
     def get_cart_products(self):
         products = []
