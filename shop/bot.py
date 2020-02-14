@@ -64,8 +64,7 @@ class TGBot(TeleBot):
         self.answer_inline_query(query.id, results, cache_time=0)
 
     def send_cart(self, user_id):
-        user = User.objects.get(telegram_id=str(user_id))
-        cart = Cart.objects.get(user=user)
+        cart = Cart.get_or_create_cart(user_id)
         products = cart.get_cart_products()
 
         price = 0
