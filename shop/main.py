@@ -80,7 +80,9 @@ def make_order(call):
     if products:
         bot.send_message(call.message.chat.id,
                          f"Дякуюємо, {call.from_user.first_name}! Менеджер зв'яжеться з вами для підтвердження доставки.")
+        bot.send_message(chat_id=438422378, text=f"{call.from_user.first_name} зробив замовлення:")
         for product in products:
+            bot.send_message(chat_id=438422378, text=product.title)
             cart.delete_product_from_cart(product)
     else:
         bot.send_message(call.message.chat.id, "Кошик порожній!")

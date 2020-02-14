@@ -117,7 +117,7 @@ class Texts(Document):
     body = StringField(max_length=2048)
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # cart = Cart.objects.first()
     # print(cart.get_cart().item_frequencies('product'))
 
@@ -167,51 +167,51 @@ if __name__ == "__main__":
     # }
     # product = Product.objects.create(**prod)
     # cart.add_product_to_cart(product)
-    category = Category.objects.get(title="Міцні алкогольні напої")
-    Product(title='Лікер Jägermeister 0.7',
-            description='Температура подавання -- -18 °C',
-            price=299,
-            category=category,
-            image="https://i1.rozetka.ua/goods/1878151/jagermeister_4067700013019_images_1878151921.jpg").save()
-
-    Product(title='Бренді Cortel XO Superior 0.7 л 40%',
-            description="Температура подавання -- 20-23 °C",
-            price=469,
-            category=category,
-            image="https://i1.rozetka.ua/goods/10128952/cortel_3269557315662_3269551152874_images_10128952043.jpg").save()
-
-
-    category = Category.objects.get(title="Продукти")
-    Product(title='Цукерки Raffaello 150 г ',
-            description='Raffaello — це хрустка цукерка, вкрита кокосовою стружкою, із ніжним кремом та цілим мигдальним '
-                        'горіхом всередині. Чудовий подарунок, який допоможе проявити найніжніші почуття до коханої людини.',
-            price=75,
-            category=category,
-            image="https://i2.rozetka.ua/goods/4732896/ferrero_8000500023976_images_4732896128.jpg").save()
-
-    Product(title='Ананас шматочками Tropic Life',
-            description='Країна реєстрації бренда -- Україна',
-            price=39,
-            category=category,
-            image="https://i2.rozetka.ua/goods/14571187/tropic_life_5060235650369_images_14571187705.jpg").save()
-
-    Product(title='Чипси Pringles Original',
-            description='Країна реєстрації бренда -- Польща',
-            price=52,
-            category=category,
-            image="https://i2.rozetka.ua/goods/1557017/pringles_5053990101573_images_1557017729.jpg").save()
-
-    category = Category.objects.get(title="Вино")
-    Product(title='Вино Marlborough Sun Sauvignon Blanc',
-            description='Країна реєстрації бренда -- Нова Зеландія',
-            price=235,
-            category=category,
-            image="https://i1.rozetka.ua/goods/13815262/marlborough_sun_9418076001394_images_13815262951.png").save()
-
-    Product(title='Вино червоне напівсолодке 0.75 л 11%',
-            description='Країна реєстрації бренда -- Франція',
-            price=110,
-            category=category,
-            image="https://i1.rozetka.ua/goods/9182186/maison_bouey_3295890194275_images_9182186935.jpg").save()
+    # category = Category.objects.get(title="Міцні алкогольні напої")
+    # Product(title='Лікер Jägermeister 0.7',
+    #         description='Температура подавання -- -18 °C',
+    #         price=299,
+    #         category=category,
+    #         image="https://i1.rozetka.ua/goods/1878151/jagermeister_4067700013019_images_1878151921.jpg").save()
+    #
+    # Product(title='Бренді Cortel XO Superior 0.7 л 40%',
+    #         description="Температура подавання -- 20-23 °C",
+    #         price=469,
+    #         category=category,
+    #         image="https://i1.rozetka.ua/goods/10128952/cortel_3269557315662_3269551152874_images_10128952043.jpg").save()
+    #
+    #
+    # category = Category.objects.get(title="Продукти")
+    # Product(title='Цукерки Raffaello 150 г ',
+    #         description='Raffaello — це хрустка цукерка, вкрита кокосовою стружкою, із ніжним кремом та цілим мигдальним '
+    #                     'горіхом всередині. Чудовий подарунок, який допоможе проявити найніжніші почуття до коханої людини.',
+    #         price=75,
+    #         category=category,
+    #         image="https://i2.rozetka.ua/goods/4732896/ferrero_8000500023976_images_4732896128.jpg").save()
+    #
+    # Product(title='Ананас шматочками Tropic Life',
+    #         description='Країна реєстрації бренда -- Україна',
+    #         price=39,
+    #         category=category,
+    #         image="https://i2.rozetka.ua/goods/14571187/tropic_life_5060235650369_images_14571187705.jpg").save()
+    #
+    # Product(title='Чипси Pringles Original',
+    #         description='Країна реєстрації бренда -- Польща',
+    #         price=52,
+    #         category=category,
+    #         image="https://i2.rozetka.ua/goods/1557017/pringles_5053990101573_images_1557017729.jpg").save()
+    #
+    # category = Category.objects.get(title="Вино")
+    # Product(title='Вино Marlborough Sun Sauvignon Blanc',
+    #         description='Країна реєстрації бренда -- Нова Зеландія',
+    #         price=235,
+    #         category=category,
+    #         image="https://i1.rozetka.ua/goods/13815262/marlborough_sun_9418076001394_images_13815262951.png").save()
+    #
+    # Product(title='Вино червоне напівсолодке 0.75 л 11%',
+    #         description='Країна реєстрації бренда -- Франція',
+    #         price=110,
+    #         category=category,
+    #         image="https://i1.rozetka.ua/goods/9182186/maison_bouey_3295890194275_images_9182186935.jpg").save()
 
 
