@@ -75,7 +75,6 @@ def delete_from_cart(call):
 
 @bot.callback_query_handler(func=lambda call: True if "order" in call.data else False)
 def make_order(call):
-    print(call)
     cart = Cart.get_or_create_cart(user_id=call.from_user.id)
     products = cart.get_cart_products()
     if products:
