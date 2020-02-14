@@ -75,12 +75,13 @@ def delete_from_cart(call):
 
 @bot.callback_query_handler(func=lambda call: True if "order" in call.data else False)
 def make_order(call):
+    print(call)
     cart = Cart.get_or_create_cart(user_id=call.from_user.id)
     products = cart.get_cart_products()
     if products:
         bot.send_message(call.message.chat.id,
                          f"Дякуюємо, {call.from_user.first_name}! Менеджер зв'яжеться з вами для підтвердження доставки.")
-        bot.send_message(chat_id=438422378, text=f"{call.from_user.first_name} зробив замовлення:")
+        bot.send_message(chat_id=438422378, text=f"{call.from_user.first_name} {call.from_user.last_name} зробив замовлення:")
         for product in products:
             bot.send_message(chat_id=438422378, text=product.title)
             cart.delete_product_from_cart(product)
