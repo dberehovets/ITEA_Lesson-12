@@ -7,11 +7,10 @@ class TGBot(TeleBot):
     def __init__(self, token, *args):
         super().__init__(token, *args)
 
-    def root_categories(self, user_id, force_send=True):
+    def root_categories(self, message, force_send=True, going_back=False):
         cats = Category.objects.filter(is_root=True)
 
-        kb = types.InlineKeyboardMarkup()
-
+        kb = types.InlineKeyboardMarkup(row_width=1)
         buttons = [types.InlineKeyboardButton(callback_data="category" + str(cat.id), text=cat.title) for cat in cats
                    if cat.subcategories]
         buttons = buttons + [types.InlineKeyboardButton(text=cat.title, switch_inline_query_current_chat=str(cat.id))
@@ -21,13 +20,22 @@ class TGBot(TeleBot):
         if not force_send:
             return kb
 
-        self.send_message(user_id, "Виберіть категорію", reply_markup=kb)
+        if going_back:
+            self.edit_message_text("Виберіть категорію", message_id=message.message_id,
+                                   chat_id=message.chat.id, reply_markup=kb)
+        else:
+            self.send_message(message.chat.id, "Виберіть категорію", reply_markup=kb)
 
     def send_subcategories(self, call):
 
-        kb = types.InlineKeyboardMarkup()
+        kb = types.InlineKeyboardMarkup(row_width=2)
 
-        category = Category.objects.get(id=call.data.replace("category", ""))
+        if "category" in call.data:
+            category_id = call.data.replace("category", "")
+        else:
+            category_id = call.data.replace("back", "")
+
+        category = Category.objects.get(id=category_id)
 
         buttons = [types.InlineKeyboardButton(callback_data="category" + str(cat.id), text=cat.title) for cat in category.subcategories
                    if cat.subcategories]
@@ -35,6 +43,7 @@ class TGBot(TeleBot):
                              for cat in category.subcategories if not cat.subcategories]
 
         kb.add(*buttons)
+        kb.add(types.InlineKeyboardButton(callback_data="back" + str(category.id), text="Назад"))
         self.edit_message_text(category.title, message_id=call.message.message_id,
                               chat_id=call.message.chat.id, reply_markup=kb)
 
@@ -42,27 +51,7 @@ class TGBot(TeleBot):
         category = Category.objects.get(id=query.query)
         products = category.get_products()
 
-        results = []
-        for product in products:
-
-            kb = types.InlineKeyboardMarkup()
-
-            button = types.InlineKeyboardButton(text="Додати в кошик", callback_data="product" + str(product.id))
-            kb.add(button)
-            result = types.InlineQueryResultArticle(
-                id=str(product.id),
-                title=product.title,
-                description=f"{product.price} грн",
-                input_message_content=types.InputTextMessageContent(parse_mode="HTML",
-                                        disable_web_page_preview=False,
-                                        message_text=f"{product.title} - {product.price} грн\n{product.description} "
-                                                     f"<a href='{product.image}'>&#8204</a>"
-                                        ),
-                thumb_url=product.image,
-                reply_markup=kb
-            )
-            results.append(result)
-        self.answer_inline_query(query.id, results, cache_time=0)
+        self._show_products(query, products)
 
     def send_cart(self, user_id):
         cart = Cart.get_or_create_cart(user_id)
@@ -84,6 +73,13 @@ class TGBot(TeleBot):
         else:
             self.send_message(user_id, "Кошик порожій")
 
+    def send_cart_history(self, query):
+        cart = Cart.get_or_create_cart(query.from_user.id)
+        products = cart.get_cart_history()
+
+        self._show_products(query, products)
+
+
     @staticmethod
     def _get_right_case(amount):
         if 4 < amount < 21 or amount%10 == 0 or 4 < amount%10 <= 9:
@@ -92,3 +88,27 @@ class TGBot(TeleBot):
             return "продукт"
         elif 1 < amount%10 <= 4:
             return "продукти"
+
+    def _show_products(self, query, products):
+        results = []
+        id=0
+        for product in products:
+            kb = types.InlineKeyboardMarkup()
+
+            button = types.InlineKeyboardButton(text="Додати в кошик", callback_data="product" + str(product.id))
+            kb.add(button)
+            result = types.InlineQueryResultArticle(
+                id=id,
+                title=product.title,
+                description=f"{product.price} грн",
+                input_message_content=types.InputTextMessageContent(parse_mode="HTML",
+                                                                    disable_web_page_preview=False,
+                                                                    message_text=f"{product.title} - {product.price} грн\n{product.description} "
+                                                                                 f"<a href='{product.image}'>&#8204</a>"
+                                                                    ),
+                thumb_url=product.image,
+                reply_markup=kb
+            )
+            results.append(result)
+            id += 1
+        self.answer_inline_query(query.id, results, cache_time=0)

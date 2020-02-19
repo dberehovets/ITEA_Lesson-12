@@ -1,0 +1,5 @@
+nohup python3 main.py & disown -h
+netstat -ntulp
+kill pid
+
+

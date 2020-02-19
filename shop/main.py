@@ -1,8 +1,8 @@
 from bot import TGBot
 from config import TOKEN, WEBHOOK_URL, PATH
-from models.model import Product, Cart, User, DoesNotExist
+from models.model import Category, Product, Cart, User, DoesNotExist
 from keyboards import START_KB
-from telebot.types import (ReplyKeyboardMarkup, KeyboardButton, Update)
+from telebot.types import (ReplyKeyboardMarkup, KeyboardButton, Update, InlineKeyboardButton, InlineKeyboardMarkup)
 from flask import Flask, request, abort
 
 bot = TGBot(token=TOKEN)
@@ -36,7 +36,7 @@ def start(message):
     except DoesNotExist:
         User(telegram_id=str(message.from_user.id)).save()
 
-    kb = ReplyKeyboardMarkup()
+    kb = ReplyKeyboardMarkup(resize_keyboard=True)
     buttons = [KeyboardButton(button_name) for button_name in START_KB.values()]
     kb.add(*buttons)
 
@@ -45,7 +45,14 @@ def start(message):
 
 @bot.message_handler(func=lambda message: message.text == START_KB["categories"])
 def get_roots(message):
-    bot.root_categories(message.chat.id)
+    bot.root_categories(message)
+
+
+@bot.message_handler(func=lambda message: message.text == START_KB["cabinet"])
+def get_cabinet(message):
+    kb = InlineKeyboardMarkup()
+    kb.add(InlineKeyboardButton(text="Історія замовлень", switch_inline_query_current_chat="history"))
+    bot.send_message(message.chat.id, "Особистий кабінет", reply_markup=kb)
 
 
 @bot.message_handler(func=lambda message: message.text == START_KB["cart"])
@@ -63,6 +70,15 @@ def add_to_cart(call):
     cart = Cart.get_or_create_cart(user_id=call.from_user.id)
     cart.add_product_to_cart(product_id=call.data.replace("product", ""))
     bot.send_message(call.from_user.id, "Товар додано в кошик!")
+
+
+@bot.callback_query_handler(func=lambda call: True if "back" in call.data else False)
+def back(call):
+    category = Category.objects.get(id=call.data.replace("back", ""))
+    if category.is_root:
+        bot.root_categories(call.message, going_back=True)
+    else:
+        bot.send_subcategories(call)
 
 
 @bot.callback_query_handler(func=lambda call: True if "delete" in call.data else False)
@@ -83,14 +99,19 @@ def make_order(call):
         bot.send_message(chat_id=438422378, text=f"{call.from_user.first_name} {call.from_user.last_name} зробив замовлення:")
         for product in products:
             bot.send_message(chat_id=438422378, text=product.title)
-            cart.delete_product_from_cart(product)
+            cart.archive_product(product)
     else:
         bot.send_message(call.message.chat.id, "Кошик порожній!")
 
 
-@bot.inline_handler(func=lambda query: True)
+@bot.inline_handler(func=lambda query: "history" not in query.query)
 def get_products(query):
     bot.send_products(query)
+
+
+@bot.inline_handler(func=lambda query: "history" in query.query)
+def get_products(query):
+    bot.send_cart_history(query)
 
 
 if __name__ == "__main__":

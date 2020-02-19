@@ -19,21 +19,25 @@ class User(Document):
 class Cart(Document):
     user = ReferenceField(User)
     is_archived = BooleanField(default=False)
-
     @classmethod
     def get_or_create_cart(cls, user_id):
         user = User.objects.get(telegram_id=str(user_id))
 
         try:
-            return cls.objects.get(user=user, is_archived=False)
+            return cls.objects.get(user=user)
         except DoesNotExist:
             return cls.objects.create(user=user)
 
     def get_cart_products(self):
         products = []
-        cart_products = CartProduct.objects(cart=self)
+        cart_products = CartProduct.objects(cart=self, is_archived=False)
         for cart_product in cart_products:
             products.append(cart_product.product)
+        return products
+
+    def get_cart_history(self):
+        cart_products = CartProduct.objects(cart=self)
+        products = [cart_product.product for cart_product in cart_products]
         return products
 
     def add_product_to_cart(self, product_id):
@@ -41,17 +45,17 @@ class Cart(Document):
         CartProduct(cart=self, product=Product.objects.get(id=product_id)).save()
 
     def delete_product_from_cart(self, product):
-        CartProduct.objects(cart=self, product=product).first().delete()
+        CartProduct.objects.get(cart=self, product=product, is_archived=False).delete()
 
-    # TO DO
-    # Overthink
-    # def get_sum(self):
-    #     return CartProduct.objects.filter(cart=self).sum()
+    def archive_product(self, product):
+        product = CartProduct.objects.get(cart=self, product=product, is_archived=False)
+        product.update(is_archived=True)
 
 
 class CartProduct(Document):
     cart = ReferenceField(Cart)
     product = ReferenceField("Product")
+    is_archived = BooleanField(default=False)
 
 
 class Attributes(EmbeddedDocument):
