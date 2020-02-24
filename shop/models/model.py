@@ -111,14 +111,10 @@ class Product(Document):
         return self.price if not self.discount_price else self.discount_price
 
 
-class Texts(Document):
-    TEXT_TYPES = (
-        ("Greeting", "Greeting"),
-        ("News", "News")
-    )
-
-    text_type = StringField(choices=TEXT_TYPES)
-    body = StringField(max_length=2048)
+class Admin(Document):
+    name = StringField(default="Admin", max_length=256)
+    email = EmailField(required=True, max_length=256)
+    password = StringField(min_length=8, max_length=256)
 
 
 # if __name__ == "__main__":

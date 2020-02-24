@@ -1,13 +1,18 @@
-from bot import TGBot
-from config import TOKEN, WEBHOOK_URL, PATH
+from config import WEBHOOK_URL, TOKEN, PATH
 from models.model import Category, Product, Cart, User, DoesNotExist
 from keyboards import START_KB
-from telebot.types import (ReplyKeyboardMarkup, KeyboardButton, Update, InlineKeyboardButton, InlineKeyboardMarkup)
+from telebot.types import (ReplyKeyboardMarkup, Update, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup)
 from flask import Flask, request, abort
-
-bot = TGBot(token=TOKEN)
+from bot import TGBot
+from flask_restful import Api
+from admin.resources import *
 
 app = Flask(__name__)
+bot = TGBot(token=TOKEN)
+api = Api(app)
+
+api.add_resource(Categories, "/categories")
+api.add_resource(Products, "/products")
 
 
 @app.route(f'/{PATH}', methods=['POST'])
@@ -28,7 +33,6 @@ def webhook():
 
 @bot.message_handler(commands=["start"])
 def start(message):
-    # txt = Texts.objects(text_type="Greetings").get()
     txt = "Hello!"
 
     try:
@@ -115,10 +119,11 @@ def get_products(query):
 
 
 if __name__ == "__main__":
-    # bot.polling()
+
     import time
     print("Started")
     bot.remove_webhook()
+    # bot.polling()
     time.sleep(1)
     bot.set_webhook(
         url=WEBHOOK_URL,
