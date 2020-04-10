@@ -1,5 +1,6 @@
 nohup python3 main.py & disown -h
 netstat -ntulp
 kill pid
+gunicorn --bind 127.0.0.1:5000 main:app --daemon - запуск у фоновому режимі через gunicorn сервер
 
 
