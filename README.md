@@ -1,6 +1,6 @@
 https://web.telegram.org/BerDima_bot
 
-Функціонал:
-1. Вивід категорій та продуктів.
-2. Кошик.
-3. Історія замовлень. Можна переглянути через особистий кабінет.
+Functionality:
+1. Showing categories and products.
+2. Cart.
+3. Orders history. Can be viewed through the own user cabinet.
